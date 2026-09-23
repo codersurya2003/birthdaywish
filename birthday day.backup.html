@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise 🫣</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: ivory;
+            overflow: hidden;
+        }
+
+        .page {
+            position: absolute;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        /* PAGE 1 */
+
+        #page1 {
+            background: linear-gradient(135deg, #111, #3b0000);
+        }
+
+        .warning-box {
+            max-width: 500px;
+        }
+
+        .warning {
+            font-size: 45px;
+            margin-bottom: 25px;
+        }
+
+        .warning-box h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .warning-box p {
+            font-size: 18px;
+            color: #ddd;
+            line-height: 1.6;
+        }
+
+        /* BUTTON */
+
+        button {
+            border: none;
+            background: ivory;
+            color: #111;
+            padding: 13px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        /* PAGE 2 */
+
+        #page2 {
+            background: linear-gradient(135deg, #f4122c, #f03c36);
+            color: #222;
+        }
+
+        .message-box {
+            max-width: 550px;
+        }
+
+        .cake {
+            font-size: 70px;
+            margin-bottom: 15px;
+        }
+
+        .message-box h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .message-box p {
+            font-size: 20px;
+            line-height: 1.7;
+        }
+
+        /* PAGE 3 */
+
+        #page3 {
+            background: linear-gradient(135deg, #151515, #30152e);
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 50px;
+        }
+
+        .photo-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .photo-subtitle {
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+
+        .photo-grid {
+            width: 100%;
+            max-width: 650px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .photo-tab {
+            min-height: 100px;
+            border-radius: 18px;
+            padding: 20px 10px;
+            background: #242424;
+            border: 1px solid #444;
+            color: ivory;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .photo-tab:hover {
+            transform: scale(1.03);
+            background: #333;
+        }
+
+        .photo-icon {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        /* POPUP */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 450px;
+            background: #222;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 280px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 70px;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: #ffb6c1;
+        }
+
+        /* PAGE 4 */
+
+        #page4 {
+            background: linear-gradient(135deg, #250005, #090909);
+        }
+
+        .final-box {
+            max-width: 550px;
+        }
+
+        .final-box h1 {
+            font-size: 35px;
+            margin-bottom: 25px;
+        }
+
+        .final-box p {
+            font-size: 19px;
+            line-height: 1.8;
+            color: #ddd;
+        }
+
+        .secret {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .secret.show {
+            display: block;
+        }
+
+        .secret h2 {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .confetti {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        /* NAVIGATION */
+
+        .navigation {
+            margin-top: 30px;
+        }
+
+        .back-btn {
+            background: #444;
+            color: white;
+            margin-right: 8px;
+        }
+
+        .next-btn {
+            background: white;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 500px) {
+
+            .warning {
+                font-size: 38px;
+            }
+
+            .warning-box h1 {
+                font-size: 24px;
+            }
+
+            .message-box h1 {
+                font-size: 32px;
+            }
+
+            .message-box p {
+                font-size: 17px;
+            }
+
+            .photo-title {
+                font-size: 27px;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .photo-tab {
+                font-size: 14px;
+                min-height: 95px;
+            }
+
+            .final-box h1 {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PAGE 1 -->
+
+    <section class="page active" id="page1">
+
+        <div class="warning-box">
+
+            <div class="warning">🚨</div>
+            <br>
+            <h1>
+                WARNING!
+            </h1>
+
+            <p>
+                Someone’s Birthday is happening today...
+            </p>
+            <p>
+                And yss... it’s YOU. 😂
+            </p>
+
+            <button onclick="nextPage()">
+                Ohh, Ennathaavuth ellaam chey 😏
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- PAGE 2 -->
+
+    <section class="page" id="page2">
+
+        <div class="message-box">
+
+            <div class="cake">🎂</div>
+
+            <h1>
+                Happy Birthday! 🥳
+            </h1>
+
+            <p>
+                Congrats 🕺
+                <br>
+                U r now one yr older.... 🤭
+                <br>
+                but don't worry, u still look young 😂😇
+            </p>
+
+            <button onclick="nextPage()">
+                Baaa...
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- PAGE 3 -->
+
+    <section class="page" id="page3">
+
+        <h1 class="photo-title">
+            📸 Your Memories
+        </h1>
+
+        <p class="photo-subtitle">
+            Click them... if you dare 👀😂
+        </p>
+
+        <div class="photo-grid">
+
+            <div class="photo-tab" onclick="openPhoto('Cute Photo 🎀','🎀')">
+                <span class="photo-icon">🎀</span>
+                Cute Photo
+            </div>
+
+            <div class="photo-tab" onclick="openPhoto('Funny Photo 😂','😂')">
+                <span class="photo-icon">😂</span>
+                Funny Photo
+            </div>
+
+            <div class="photo-tab" onclick="openPhoto('Favourite 🥹','🥹')">
+                <span class="photo-icon">🥹</span>
+                Favourite
+            </div>
+
+            <div class="photo-tab" onclick="openPhoto('Childhood 🧸','🧸')">
+                <span class="photo-icon">🧸</span>
+                Childhood
+            </div>
+
+            <div class="photo-tab" onclick="openPhoto('Family ❤️','❤️')">
+                <span class="photo-icon">🏠</span>
+                Family
+            </div>
+
+            <div class="photo-tab" onclick="openPhoto('Oops... 🤭','🤭')">
+                <span class="photo-icon">🤭</span>
+                Oops...
+            </div>
+
+            <div class="photo-tab" onclick="openPhoto('Best One ✨','✨')">
+                <span class="photo-icon">✨</span>
+                Best One
+            </div>
+
+            <div class="photo-tab" onclick="openPhoto('Secret 🎁','🔒')">
+                <span class="photo-icon">🎁</span>
+                Secret
+            </div>
+
+        </div>
+
+        <div class="navigation">
+
+            <button class="back-btn" onclick="prevPage()">
+                Pooo...
+            </button>
+
+            <button class="next-btn" onclick="nextPage()">
+                Baaa...
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- PHOTO POPUP -->
+
+    <div class="modal" id="photoModal">
+
+        <div class="modal-box">
+
+            <h2 id="modalTitle">
+                Cute Photo 🎀
+            </h2>
+
+            <div class="photo-placeholder" id="modalPhoto">
+
+
+                🎀
+            </div>
+
+            <p>
+                Okay... this one deserves a place here. 🥹❤️
+            </p>
+
+            <button class="close-btn" onclick="closePhoto()">
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAGE 4 -->
+
+    <section class="page" id="page4">
+
+        <div class="final-box">
+
+            <div class="confetti">
+                🎉🎂🎈
+            </div>
+
+            <h1>
+                Okay... one last thing.
+            </h1>
+
+            <p>
+                HAPPY BIRTHDAY 🎊💃✨🕺🎊
+
+                <br>
+                Maalu kutty... 😍
+                <br>
+                Happy aa iriii... Nallaa chaapidu... 🫂🖤
+                <br>
+                Gundaanaalum thappilla Undaanaalum Thappilla 🫢🫣
+            </p>
+
+            <button onclick="showSecret()">
+                Open the last surprise 🎁
+            </button>
+
+            <div class="secret" id="secret">
+
+                <h1>
+                    Hey Maalamma... 👀👀👀
+                </h1>
+
+                <h3>
+                    I'm Toodu... 😁😎
+                </h3>
+                <br>
+                Naa itha solliye aaganum 💃
+                <br>
+                Nee avalavo azhagu... 🙈
+                <br>
+                Inga evanum ivalo azhaga paathiruka maattaanga 🫵❤️‍🔥
+                <br>
+                and un paasamalar thangachi unmela paasama iruka 👉🏻💗👈🏻
+                <br>
+                Luv u ummaahh 😘
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <script>
+
+        let currentPage = 1;
+
+        function showPage(number) {
+
+            document.querySelectorAll(".page").forEach(page => {
+                page.classList.remove("active");
+            });
+
+            document.getElementById("page" + number)
+                .classList.add("active");
+
+            currentPage = number;
+        }
+
+
+        function nextPage() {
+
+            if (currentPage < 4) {
+                showPage(currentPage + 1);
+            }
+
+        }
+
+
+        function prevPage() {
+
+            if (currentPage > 1) {
+                showPage(currentPage - 1);
+            }
+
+        }
+
+
+        /* PHOTO POPUP */
+
+        function openPhoto(title, emoji) {
+
+            document.getElementById("modalTitle").innerText = title;
+
+            document.getElementById("modalPhoto").innerText = emoji;
+
+            document.getElementById("photoModal")
+                .classList.add("show");
+
+        }
+
+
+        function closePhoto() {
+
+            document.getElementById("photoModal")
+                .classList.remove("show");
+
+        }
+
+
+        /* FINAL SECRET */
+
+        function showSecret() {
+
+            document.getElementById("secret")
+                .classList.add("show");
+
+            createConfetti();
+
+        }
+
+
+        /* SIMPLE CONFETTI */
+
+        function createConfetti() {
+
+            for (let i = 0; i < 30; i++) {
+
+                let confetti = document.createElement("div");
+
+                confetti.innerText = "🎊";
+
+                confetti.innerText = "🎉";
+
+                confetti.innerText = "✨";
+
+                confetti.innerText = "❄️";
+
+                confetti.style.position = "fixed";
+                confetti.style.left = Math.random() * 100 + "%";
+                confetti.style.top = "-30px";
+                confetti.style.fontSize = "25px";
+                confetti.style.zIndex = "20";
+
+                document.body.appendChild(confetti);
+
+                let fall = confetti.animate(
+                    [
+                        { transform: "translateY(0) rotate(0deg)" },
+                        {
+                            transform:
+                                "translateY(110vh) rotate(720deg)"
+                        }
+                    ],
+                    {
+                        duration: 2500 + Math.random() * 2000,
+                        easing: "linear"
+                    }
+                );
+
+                fall.onfinish = () => confetti.remove();
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
